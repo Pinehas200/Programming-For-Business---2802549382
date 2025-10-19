@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Validation Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      color: #0a3d62;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      margin: auto;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    .error {
+      color: red;
+      font-size: 0.85em;
+    }
+    .invalid {
+      border-color: red;
+    }
+    .gender, .hobbies {
+      margin-top: 5px;
+    }
+    .submit-btn {
+      background-color: #0a3d62;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin-top: 15px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    .submit-btn:hover {
+      background-color: #1e5a87;
+    }
+  </style>
+</head>
+<body>
+  <h2>Validation Form</h2>
+  <form id="myForm" novalidate>
+    <label>Full Name:</label>
+    <input type="text" id="fullname">
+    <span class="error" id="fullnameError"></span>
+
+    <label>Email Address:</label>
+    <input type="email" id="email">
+    <span class="error" id="emailError"></span>
+
+    <label>Password:</label>
+    <input type="password" id="password">
+    <span class="error" id="passwordError"></span>
+
+    <label>Confirm Password:</label>
+    <input type="password" id="confirmPassword">
+    <span class="error" id="confirmError"></span>
+
+    <label>Phone Number:</label>
+    <input type="text" id="phone">
+    <span class="error" id="phoneError"></span>
+
+    <label>Gender:</label>
+    <div class="gender">
+      <input type="radio" name="gender" value="Male"> Male
+      <input type="radio" name="gender" value="Female"> Female
+    </div>
+    <span class="error" id="genderError"></span>
+
+    <label>Hobbies/Interests:</label>
+    <div class="hobbies">
+      <input type="checkbox" name="hobbies" value="Reading"> Reading
+      <input type="checkbox" name="hobbies" value="Gaming"> Gaming
+      <input type="checkbox" name="hobbies" value="Sports"> Sports
+    </div>
+    <span class="error" id="hobbiesError"></span>
+
+    <label>Country:</label>
+    <select id="country">
+      <option value="">-- Select Country --</option>
+      <option value="Indonesia">Indonesia</option>
+      <option value="Singapore">Singapore</option>
+      <option value="Malaysia">Malaysia</option>
+    </select>
+    <span class="error" id="countryError"></span>
+
+    <button type="submit" class="submit-btn">Submit</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('myForm');
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      let isValid = true;
+
+      document.querySelectorAll('.error').forEach(e => e.textContent = '');
+      document.querySelectorAll('input, select').forEach(el => el.classList.remove('invalid'));
+
+      const fullname = document.getElementById('fullname');
+      if (fullname.value.trim() === '') {
+        isValid = false;
+        fullname.classList.add('invalid');
+        document.getElementById('fullnameError').textContent = 'Full name cannot be empty.';
+      }
+
+      const email = document.getElementById('email');
+      const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      if (!emailPattern.test(email.value.trim())) {
+        isValid = false;
+        email.classList.add('invalid');
+        document.getElementById('emailError').textContent = 'Enter a valid email address.';
+      }
+
+      const password = document.getElementById('password');
+      if (password.value.length < 6) {
+        isValid = false;
+        password.classList.add('invalid');
+        document.getElementById('passwordError').textContent = 'Password must be at least 6 characters.';
+      }
+
+      const confirmPassword = document.getElementById('confirmPassword');
+      if (confirmPassword.value !== password.value || confirmPassword.value === '') {
+        isValid = false;
+        confirmPassword.classList.add('invalid');
+        document.getElementById('confirmError').textContent = 'Passwords do not match.';
+      }
+
+      const phone = document.getElementById('phone');
+      const phonePattern = /^[0-9]{10,}$/;
+      if (!phonePattern.test(phone.value.trim())) {
+        isValid = false;
+        phone.classList.add('invalid');
+        document.getElementById('phoneError').textContent = 'Phone must be numeric and at least 10 digits.';
+      }
+
+      const gender = document.querySelector('input[name="gender"]:checked');
+      if (!gender) {
+        isValid = false;
+        document.getElementById('genderError').textContent = 'Please select a gender.';
+      }
+
+      const hobbies = document.querySelectorAll('input[name="hobbies"]:checked');
+      if (hobbies.length === 0) {
+        isValid = false;
+        document.getElementById('hobbiesError').textContent = 'Select at least one hobby.';
+      }
+
+      const country = document.getElementById('country');
+      if (country.value === '') {
+        isValid = false;
+        country.classList.add('invalid');
+        document.getElementById('countryError').textContent = 'Please select a country.';
+      }
+
+      if (isValid) {
+        alert('Form submitted successfully!');
+        form.reset();
+      }
+    });
+  </script>
+</body>
+</html>
+  
